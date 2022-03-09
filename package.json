@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "evergreen-ui": "^6.9.2",
     "mongodb": "^4.4.1",
     "next": "12.1.0",
     "next-auth": "3.29.0",
