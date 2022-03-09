@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import classes from "./StartingSection.module.css";
 import { signIn } from "next-auth/client";
 import { useRouter } from "next/router";
-import { Button, toaster } from 'evergreen-ui';
+import {toaster } from 'evergreen-ui';
 
 async function createUser(email, password) {
   const response = await fetch("/api/auth/signup", {

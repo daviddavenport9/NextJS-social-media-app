@@ -6,3 +6,10 @@
   .profile h1 {
     font-size: 5rem;
   }
+
+  .section{
+      text-align: center;
+      padding-top: 20px;
+      color: white;
+      font-weight: bold;
+  }

@@ -37,6 +37,10 @@ async function handler(req, res) {
     const result = await db.collection("users").insertOne({
       email: email,
       password: hashedPassword,
+      firstName: '',
+      lastName: '',
+      bio: '',
+      dob: ''
     });
 
     res.status(201).json({ message: "Created user!" });

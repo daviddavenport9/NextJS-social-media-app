@@ -14,12 +14,14 @@ function MainNavigation() {
 
   }
   return (
-    <header className={classes.header}>
+    <header className={session ? classes.header : null}>
+        {session && (
       <Link href="/">
         <a>
           <div className={classes.logo}>Next Auth</div>
         </a>
       </Link>
+        )}
       <nav>
         <ul>
           {session && (
