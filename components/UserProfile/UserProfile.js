@@ -43,6 +43,7 @@ function UserProfile(props) {
         lastName={props.lastName}
         bio={props.bio}
         dob={props.dob}
+        profilePic={props.profilePic}
       />
     </div>
   );

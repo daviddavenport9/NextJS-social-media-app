@@ -40,7 +40,8 @@ async function handler(req, res) {
       firstName: '',
       lastName: '',
       bio: '',
-      dob: ''
+      dob: '',
+      profilePic: ''
     });
 
     res.status(201).json({ message: "Created user!" });

@@ -20,6 +20,8 @@ async function handler(req, res) {
   const lastName = req.body.lastName;
   const bio = req.body.bio;
   const dob = req.body.dob;
+  const profilePic = req.body.profilePic;
+
 
   const client = await connectToDatabase();
 
@@ -35,13 +37,15 @@ async function handler(req, res) {
     return;
   }
 
+  
+
   const result = await usersCollection.updateOne(
     { email: userEmail },
-    { $set: { firstName: firstName, lastName: lastName, bio: bio, dob: dob } }
+    { $set: { firstName: firstName, lastName: lastName, bio: bio, dob: dob, profilePic: profilePic} }
   );
 
   client.close();
-  res.status(200).json({ message: "Profile updated!" });
+  res.status(200).json({ message: "Profile updated!"});
 
 }
 

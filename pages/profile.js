@@ -44,6 +44,7 @@ export async function getServerSideProps(context) {
       lastname: user.lastName,
       bio: user.bio,
       dob: user.dob,
+      profilePic: user.profilePic
     },
   };
 }

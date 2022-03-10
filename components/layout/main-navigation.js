@@ -4,26 +4,24 @@ import { useSession, signOut } from "next-auth/client";
 import classes from "./main-navigation.module.css";
 import { useRouter } from "next/router";
 
-
 function MainNavigation() {
   const [session, loading] = useSession();
 
-
-  function logoutHandler(){
+  function logoutHandler() {
     signOut();
-
   }
   return (
-    <header className={session ? classes.header : null}>
-        {session && (
+    <header className={classes.header}>
       <Link href="/">
         <a>
           <div className={classes.logo}>Next Auth</div>
         </a>
       </Link>
-        )}
       <nav>
         <ul>
+            <li>
+              <Link href={"/feed"}>Feed</Link>
+            </li>
           {session && (
             <li>
               <Link href="/profile">Profile</Link>

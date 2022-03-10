@@ -11,6 +11,7 @@ function ProfileForm(props) {
   const lastNameInput = useRef();
   const bioInput = useRef();
   const dobInput = useRef();
+  const profilePictureInput = useRef();
 
   useEffect(() => {
     getSession().then((session) => {
@@ -24,12 +25,15 @@ function ProfileForm(props) {
     const enteredLastName = lastNameInput.current.value;
     const enteredBio = bioInput.current.value;
     const enteredDob = dobInput.current.value;
+    const enteredProfilePic = profilePictureInput.current.files[0];
+
 
     props.onUpdateProfile({
       firstName: enteredFirstName,
       lastName: enteredLastName,
       bio: enteredBio,
       dob: enteredDob,
+      profilePic: enteredProfilePic
     });
   }
 
@@ -44,6 +48,10 @@ function ProfileForm(props) {
         <div className={classes.control}>
           <label htmlFor="Email">Email: </label>
           <input type="email" id="email" value={email} disabled />
+        </div>
+        <div className={classes.control}>
+          <label htmlFor="profilePic">Profile Picture: </label>
+          <input type="file" id="profilePic" accept="image/png, image/jpeg, image/jpg"  ref={profilePictureInput}/>
         </div>
         <div className={classes.control}>
           <label htmlFor="firstName">First Name: </label>
