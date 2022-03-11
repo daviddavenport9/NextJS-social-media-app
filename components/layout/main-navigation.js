@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/client";
 
 import classes from "./main-navigation.module.css";
-import { useRouter } from "next/router";
 
 function MainNavigation() {
   const [session, loading] = useSession();

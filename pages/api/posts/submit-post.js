@@ -1,8 +1,13 @@
 import { getSession } from "next-auth/client";
-import { connectToDatabase } from "../../util/db";
+import { connectToDatabase } from "../../../util/db";
 
 async function handler(req, res) {
     if (req.method !== "POST") {
+      return;
+    }
+
+    if (!req.body.postText || req.body.postText.trim().length === 0){
+      res.status(401).json({ message: "Invalid Post: Must contain characters!" });
       return;
     }
   

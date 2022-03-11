@@ -1,8 +1,8 @@
 import { Fragment, useState } from "react";
-import CreatePost from "../components/Posts/CreatePost";
-import Posts from "../components/Posts/Posts";
+import CreatePost from "../../components/Posts/CreatePost";
+import Posts from "../../components/Posts/Posts";
 import { useSession } from "next-auth/client";
-import { connectToDatabase } from "../util/db";
+import { connectToDatabase } from "../../util/db";
 
 
 function FeedPage(props) {
@@ -10,7 +10,8 @@ function FeedPage(props) {
   return (
     <Fragment>
       {session && <CreatePost />}
-      <Posts />
+      <hr></hr>
+      <Posts allPosts={props.posts}/>
     </Fragment>
   );
 }
@@ -18,20 +19,13 @@ function FeedPage(props) {
 export async function getServerSideProps(context) {
 
  const client = await connectToDatabase();
-
   const postsCollection =  client.db().collection("posts");
-
-  const posts = await postsCollection.find().toArray();
-
-
-  console.log(JSON.parse(JSON.stringify(posts)));
-
-
+  const posts = await postsCollection.find().sort({_id: -1}).toArray();
   client.close();
 
   return{
       props: {
-          postsCollection: JSON.parse(JSON.stringify(posts))
+          posts: JSON.parse(JSON.stringify(posts))
       }
   }
 }
