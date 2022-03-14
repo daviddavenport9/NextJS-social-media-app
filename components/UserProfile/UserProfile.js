@@ -44,6 +44,7 @@ function UserProfile(props) {
         bio={props.bio}
         dob={props.dob}
         profilePic={props.profilePic}
+        username={props.username}
       />
     </div>
   );

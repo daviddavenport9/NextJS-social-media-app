@@ -2,14 +2,15 @@ import { useState, useRef } from "react";
 import classes from "./StartingSection.module.css";
 import { signIn } from "next-auth/client";
 import { useRouter } from "next/router";
-import {toaster } from 'evergreen-ui';
+import { toaster } from "evergreen-ui";
 
-async function createUser(email, password) {
+async function createUser(email, password, username) {
   const response = await fetch("/api/auth/signup", {
     method: "POST",
     body: JSON.stringify({
       email,
       password,
+      username
     }),
     headers: {
       "Content-Type": "application/json",
@@ -25,19 +26,17 @@ async function createUser(email, password) {
   return data;
 }
 
-
-
-
 function StartingSection() {
   const [isLogin, setIsLogin] = useState(true);
   const emailInput = useRef();
   const passwordInput = useRef();
+  const usernameInput = useRef();
   const router = useRouter();
   const [isError, setIsError] = useState();
 
   const customNotify = () => {
     toaster.notify(isError);
-  }
+  };
 
   async function submitHandler(event) {
     event.preventDefault();
@@ -56,22 +55,23 @@ function StartingSection() {
         setIsError(result.error);
       }
     } else {
+    const enteredUsername = usernameInput.current.value;
       try {
-        const result = await createUser(enteredEmail, enteredPassword);
-        toaster.notify('Account successfully created!');
+        const result = await createUser(enteredEmail, enteredPassword, enteredUsername);
+        toaster.notify("Account successfully created!");
         setIsLogin(!isLogin);
-        emailInput.current.value = '';
-        passwordInput.current.value = '';
+        emailInput.current.value = "";
+        passwordInput.current.value = "";
       } catch (error) {
-         setIsError(error.toString());
+        setIsError(error.toString());
       }
     }
   }
 
   function switchMode() {
     setIsLogin(!isLogin);
-    emailInput.current.value = '';
-    passwordInput.current.value = '';
+    emailInput.current.value = "";
+    passwordInput.current.value = "";
     setIsError(null);
   }
 
@@ -83,6 +83,14 @@ function StartingSection() {
           <label htmlFor="email">Email:</label>
           <input type="email" id="email" required ref={emailInput} />
         </div>
+        <div>
+          {!isLogin && (
+            <div className={classes.control}>
+              <label htmlFor="username">Username:</label>
+              <input type="text" id="username" required ref={usernameInput} />
+            </div>
+          )}
+        </div>
         <div className={classes.control}>
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" required ref={passwordInput} />
@@ -93,7 +101,7 @@ function StartingSection() {
             {isLogin ? "Create new account" : "Log in with existing account"}
           </button>
         </div>
-        {isError &&( <div>{customNotify()}</div>)}
+        {isError && <div>{customNotify()}</div>}
       </form>
     </div>
   );

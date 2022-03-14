@@ -11,20 +11,25 @@ function MainNavigation() {
   }
   return (
     <header className={classes.header}>
-      <Link href="/">
+      <Link href="/feed">
         <a>
-          <div className={classes.logo}>Next Auth</div>
+          <div className={classes.logo}>Feeder</div>
         </a>
       </Link>
       <nav>
         <ul>
-            <li>
-              <Link href={"/feed"}>Feed</Link>
-            </li>
+          <li>
+            <Link href={"/feed"}>Feed</Link>
+          </li>
           {session && (
             <li>
               <Link href="/profile">Profile</Link>
             </li>
+          )}
+          {!session && (
+          <li>
+            <Link href="/">Login/Register</Link>
+          </li>
           )}
           {session && (
             <li>

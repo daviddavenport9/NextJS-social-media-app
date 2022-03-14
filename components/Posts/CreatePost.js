@@ -4,11 +4,11 @@ import classes from "./CreatePost.module.css";
 import {toaster } from 'evergreen-ui';
 
 
-async function submitPost(userEmail, postText, postDate, postTime) {
+async function submitPost(username, postText, postDate, postTime) {
   const response = await fetch("/api/posts/submit-post", {
     method: "POST",
     body: JSON.stringify({
-      userEmail,
+      username,
       postText,
       postDate,
       postTime,
@@ -29,7 +29,7 @@ async function submitPost(userEmail, postText, postDate, postTime) {
 
 
 
-function CreatePost() {
+function CreatePost(props) {
   const [session, loading] = useSession();
   const postInput = useRef();
   const [isError, setIsError] = useState();
@@ -41,7 +41,7 @@ function CreatePost() {
   async function submitHandler(event) {
     event.preventDefault();
     const postText = postInput.current.value;
-    const userEmail = session.user.email;
+    const username = props.username;
     const time = new Date();
     const postTime = time.toLocaleTimeString(navigator.language, {
       hour: "2-digit",
@@ -50,7 +50,7 @@ function CreatePost() {
     const postDate = time.toLocaleDateString();
 
     try {
-      await submitPost(userEmail, postText, postDate, postTime);
+      await submitPost(username, postText, postDate, postTime);
       postInput.current.value = "";
     } catch (error) {
       setIsError(error.toString());

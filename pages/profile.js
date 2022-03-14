@@ -10,6 +10,7 @@ function ProfilePage(props) {
         lastName={props.lastname}
         bio={props.bio}
         dob={props.dob}
+        username={props.username}
       />
     </div>
   );
@@ -40,6 +41,7 @@ export async function getServerSideProps(context) {
     props: {
       session,
       userEmail,
+      username: user.username,
       firstname: user.firstName,
       lastname: user.lastName,
       bio: user.bio,

@@ -5,12 +5,12 @@ async function handler(req, res) {
   if (req.method === "POST") {
     // res.status(201).json({ message: "Created user!" });
     const data = req.body;
-    const { email, password } = data;
+    const { email, password, username } = data;
     if (
       !email ||
       !email.includes("@") ||
       !password ||
-      password.trim().length < 7
+      password.trim().length < 7 || !username
     ) {
       res.status(422).json({
         message:
@@ -32,11 +32,14 @@ async function handler(req, res) {
       return;
     }
 
+    const formattedUsername = "@" + username;
+
     const hashedPassword = await hashPassword(password);
 
     const result = await db.collection("users").insertOne({
       email: email,
       password: hashedPassword,
+      username: formattedUsername,
       firstName: '',
       lastName: '',
       bio: '',

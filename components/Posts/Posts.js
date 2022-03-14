@@ -32,7 +32,7 @@ function Posts(props) {
         {props.allPosts.map((post) => (
           <div className={classes.indivPostContainer}>
             <li key={post._id}>
-              <h5>{post.email}</h5>
+              <h5>{post.username}</h5>
               <p>{post.postText}</p>
               <hr></hr>
               <div className={classes.interactContainer}>

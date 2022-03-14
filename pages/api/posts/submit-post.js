@@ -20,7 +20,7 @@ async function handler(req, res) {
       return;
     }
 
-    const userEmail = session.user.email;
+    const username = req.body.username;
     const postText = req.body.postText;
     const postTime = req.body.postTime;
     const postDate = req.body.postDate;
@@ -30,7 +30,7 @@ async function handler(req, res) {
     const db = client.db();
 
     await db.collection("posts").insertOne({
-            email: userEmail,
+            username: username,
             postText: postText,
             postTime: postTime,
             postDate: postDate
