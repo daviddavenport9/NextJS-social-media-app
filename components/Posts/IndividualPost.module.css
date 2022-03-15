@@ -16,15 +16,21 @@
     word-wrap: break-word;
 }
 
-.indivPostContainer h5 {
+.indivPostContainer h4 {
    display: flex;
 }
 
-
- .allPostsContainer{
-    list-style-type: none;
-    margin-right: 40px;
+#comments {
+    color: white;
+    text-align: center;
 }
+
+
+.dateTimeFormat{
+    display: flex;
+    justify-content:space-around
+}
+
 
 .likeBtn{
     height: 38px;
@@ -62,29 +68,6 @@
     margin: 0 1rem;
   }
 
-  .container {
-    /* margin: 3rem auto; */
-    width: 95%;
-    max-width: 25rem;
-    border-radius: 6px;
-    background-color: #38015c;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    padding: 1rem;
-    text-align: center;
-    margin: 2rem auto;
-}
-
-.control textarea{
-    font: inherit;
-    background-color: #f1e1fc;
-    color: #38015c;
-    border-radius: 4px;
-    border: 1px solid white;
-    width: 100%;
-    text-align: left;
-    padding: 0.25rem;
-  }
-
   .actions {
     margin-top: 1.5rem;
     display: flex;
@@ -106,4 +89,20 @@
     background-color: #873abb;
     border-color: #873abb;
   }
-  
+
+  .actions textarea {
+    font: inherit;
+    background-color: #f1e1fc;
+    color: #38015c;
+    border-radius: 4px;
+    border: 1px solid white;
+    width: 100%;
+    text-align: left;
+    padding: 0.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .allPostsContainer{
+    list-style-type: none;
+    margin-right: 40px;
+}

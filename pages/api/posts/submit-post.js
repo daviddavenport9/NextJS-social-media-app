@@ -36,7 +36,14 @@ async function handler(req, res) {
             postDate: postDate
     });
 
-    res.status(201).json({ message: "Created post!" });
+    res
+    .status(201)
+    .json({
+      username: username,
+      postText: postText,
+      postTime: postTime,
+      postDate: postDate
+    });
     client.close();
 
 }
