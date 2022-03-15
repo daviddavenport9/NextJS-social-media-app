@@ -132,6 +132,7 @@ function Posts(props) {
                     </Link>
                     <p>Leave a comment</p>
                   </li>
+                  {props.username === post.username && (
                   <li>
                   <button className={classes.likeBtn} onClick={() => deleteHandler(post._id)}>
                   <FontAwesomeIcon
@@ -141,6 +142,7 @@ function Posts(props) {
                   </button>
                   <p>Delete Post</p>
                   </li>
+                  )}
                 </ul>
               </div>
             </li>
