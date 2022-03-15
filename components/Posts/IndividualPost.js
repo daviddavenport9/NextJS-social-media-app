@@ -1,9 +1,10 @@
 import classes from "./IndividualPost.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faComment, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Fragment, useRef, useState } from "react";
 import { toaster } from "evergreen-ui";
 import { useSession } from "next-auth/client";
+import Link from "next/link";
 
 
 function IndividualPost(props) {
@@ -13,7 +14,6 @@ function IndividualPost(props) {
   const [isError, setIsError] = useState();
   const [showComments, setShowComments] = useState(false);
   const [session, loading] = useSession();
-
 
   function toggleLike() {
     setLiked(!liked);
@@ -44,7 +44,9 @@ function IndividualPost(props) {
     if (!response.ok) {
       throw new Error(data.message || "Something went wrong");
     }
-    setCommentsArray((commentsArray) => [...commentsArray, data].sort().reverse());
+    setCommentsArray((commentsArray) =>
+      [...commentsArray, data].sort().reverse()
+    );
 
     return data;
   }
@@ -79,6 +81,21 @@ function IndividualPost(props) {
     setShowComments(!showComments);
   }
 
+  async function deleteHandler(postId){
+    postId = props.getSelectedPost._id
+    const response = await fetch('/api/posts/delete-post', {
+      method: "DELETE",
+      body: JSON.stringify({
+        postId
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+  }
+
   const changeColor = liked ? "red" : "white";
 
   return (
@@ -103,10 +120,15 @@ function IndividualPost(props) {
               <p>Like</p>
             </li>
             <li>
-              <button className={classes.likeBtn}>
-                <FontAwesomeIcon icon={faComment} style={{ color: "white" }} />
+            <Link href={"/feed"}>
+              <button
+                className={classes.likeBtn}
+                onClick={deleteHandler}
+              >
+                <FontAwesomeIcon icon={faTrash} style={{ color: "white" }} />
               </button>
-              <p>Leave a comment</p>
+              </Link>
+              <p>Delete post</p>
             </li>
           </ul>
         </div>
@@ -114,14 +136,14 @@ function IndividualPost(props) {
       <div id={classes.comments}>
         <h2>Comments</h2>
       </div>
-     
-          <div className={classes.actions}>
-            <button onClick={toggleComments}>
-              {!showComments ? "Show Comments" : "Hide Comments"}
-            </button>
-          </div>
-          {showComments && (
-            <div>
+
+      <div className={classes.actions}>
+        <button onClick={toggleComments}>
+          {!showComments ? "Show Comments" : "Hide Comments"}
+        </button>
+      </div>
+      {showComments && (
+        <div>
           <div className={classes.indivPostContainer}>
             <form onSubmit={submitHandler}>
               <div className={classes.actions}>
@@ -135,9 +157,9 @@ function IndividualPost(props) {
             {commentsArray.map((comment) => (
               <div key={comment._id} className={classes.indivPostContainer}>
                 <li>
-                <div>
-                  <h4>{comment.username}</h4>
-                </div>
+                  <div>
+                    <h4>{comment.username}</h4>
+                  </div>
                   <p>{comment.comment}</p>
                   <hr></hr>
                   <div className={classes.dateTimeFormat}>

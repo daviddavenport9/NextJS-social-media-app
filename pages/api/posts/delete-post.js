@@ -20,6 +20,10 @@ async function handler(req, res) {
   const client = await connectToDatabase();
   const db = client.db();
 
+  await db.collection("comments").deleteMany({
+      postId: req.body.postId
+  })
+
   await db.collection("posts").deleteOne({
       _id: ObjectId(req.body.postId)
      })
