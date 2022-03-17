@@ -16,7 +16,7 @@ async function handler(req, res) {
     });
   
     if (!session) {
-      res.status(401).json({ message: "Not allowed!" });
+      res.status(401).json({ message: "Not allowed - must be logged in!" });
       return;
     }
 
@@ -31,6 +31,7 @@ async function handler(req, res) {
 
     await db.collection("posts").insertOne({
             username: username,
+            email: session.user.email,
             postText: postText,
             postTime: postTime,
             postDate: postDate

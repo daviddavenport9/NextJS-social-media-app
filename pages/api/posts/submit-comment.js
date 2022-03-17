@@ -33,6 +33,7 @@ async function handler(req, res) {
 
   await db.collection("comments").insertOne({
     comment: comment,
+    email: email,
     username: user.username,
     postId: postId,
     postTime: postTime,

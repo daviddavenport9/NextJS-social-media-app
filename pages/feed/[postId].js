@@ -8,55 +8,61 @@ function PostDetailPage(props) {
 
   return (
     <div>
-      <IndividualPost getSelectedPost={post} getComments={props.comments}/>
+      <IndividualPost getSelectedPost={post} getComments={props.comments} username={props.username}/>
     </div>
   );
 }
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
   const postId = context.params.postId;
+
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   const client = await connectToDatabase();
 
   const postsCollection = client.db().collection("posts");
   const commentsCollection = client.db().collection("comments");
+  const usersCollection = client.db().collection("users");
 
-  const comments = await commentsCollection.find({
-    postId: postId
-  }).sort({_id: -1}).toArray();
+  const comments = await commentsCollection
+    .find({
+      postId: postId,
+    })
+    .sort({ _id: -1 })
+    .toArray();
 
   const post = await postsCollection.findOne({
-      _id: ObjectId(postId)
+    _id: ObjectId(postId),
   });
 
-  if (!comments){
+  const userEmail = session.user.email;
+  const user = await usersCollection.findOne({
+    email: userEmail,
+  });
+
+  if (!comments) {
     return {
       props: {
-        selectedPost: JSON.parse(JSON.stringify(post))
-      }
-    }
+        selectedPost: JSON.parse(JSON.stringify(post)),
+         username: user.username
+      },
+    };
   }
 
   return {
     props: {
       selectedPost: JSON.parse(JSON.stringify(post)),
       comments: JSON.parse(JSON.stringify(comments)),
+      username: user.username
     },
-  };
-}
-
-export async function getStaticPaths() {
-  const client = await connectToDatabase();
-
-  const postsCollection = client.db().collection("posts");
-
-  const posts = await postsCollection.find().toArray();
-
-  const paths = posts.map((post) => ({ params: {postId: post._id.toString() } }));
-
-  return {
-    paths: paths,
-    fallback:"blocking",
   };
 }
 

@@ -1,11 +1,10 @@
 import { Fragment, useState } from "react";
 import Posts from "../../components/Posts/Posts";
-import { useSession, getSession } from "next-auth/client";
+import {getSession } from "next-auth/client";
 import { connectToDatabase } from "../../util/db";
 
 
 function FeedPage(props) {
-  const [session, loading] = useSession();
   return (
     <Fragment>
       <Posts allPosts={props.posts} username={props.username}/>
@@ -21,14 +20,14 @@ export async function getServerSideProps(context) {
   const posts = await postsCollection.find().sort({_id: -1}).toArray();
 
   const session = await getSession({ req: context.req });
- if (!session){
-   return {
-     props: {
-      posts: JSON.parse(JSON.stringify(posts)),
-
-     }
-   }
- }
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   const usersCollection = client.db().collection("users");
   const userEmail = session.user.email;

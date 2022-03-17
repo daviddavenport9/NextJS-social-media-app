@@ -4,6 +4,9 @@ import { faHeart, faComment, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { useSession, getSession } from "next-auth/client";
+import { useRouter } from "next/router";
+import { toaster } from "evergreen-ui";
+
 
 
 
@@ -14,6 +17,11 @@ function Posts(props) {
   const [postsArray, setPostsArray] = useState(props.allPosts);
   const postInput = useRef();
   const [isError, setIsError] = useState();
+  const router = useRouter();
+
+  
+
+ 
 
   async function submitPost(username, postText, postDate, postTime) {
     const response = await fetch("/api/posts/submit-post", {
@@ -59,6 +67,7 @@ function Posts(props) {
     try {
       await submitPost(username, postText, postDate, postTime);
       postInput.current.value = "";
+      router.replace('/feed');
     } catch (error) {
       setIsError(error.toString());
     }
@@ -76,6 +85,8 @@ function Posts(props) {
     });
 
     const data = await response.json();
+    router.replace('/feed');
+
   }
 
   function toggleLike() {

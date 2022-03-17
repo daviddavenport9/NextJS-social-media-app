@@ -11,25 +11,23 @@ function MainNavigation() {
   }
   return (
     <header className={classes.header}>
-      <Link href="/feed">
-        <a>
-          <div className={classes.logo}>Feeder</div>
-        </a>
-      </Link>
+      <div className={classes.logo}>Feeder</div>
       <nav>
         <ul>
-          <li>
-            <Link href={"/feed"}>Feed</Link>
-          </li>
+          {session && (
+            <li>
+              <Link href={"/feed"}>Feed</Link>
+            </li>
+          )}
           {session && (
             <li>
               <Link href="/profile">Profile</Link>
             </li>
           )}
           {!session && (
-          <li>
-            <Link href="/">Login/Register</Link>
-          </li>
+            <li>
+              <Link href="/">Login/Register</Link>
+            </li>
           )}
           {session && (
             <li>

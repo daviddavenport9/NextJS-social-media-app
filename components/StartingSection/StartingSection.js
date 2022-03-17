@@ -50,7 +50,7 @@ function StartingSection() {
         password: enteredPassword,
       });
       if (!result.error) {
-        router.replace("/profile");
+        router.replace("/feed");
       } else {
         setIsError(result.error);
       }

@@ -1,10 +1,11 @@
 import classes from "./IndividualPost.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faComment, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Fragment, useRef, useState } from "react";
+import { faHeart, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Fragment, useRef, useState, useEffect} from "react";
 import { toaster } from "evergreen-ui";
-import { useSession } from "next-auth/client";
-import Link from "next/link";
+import { useSession, getSession } from "next-auth/client";
+import { useRouter } from "next/router";
+
 
 
 function IndividualPost(props) {
@@ -14,6 +15,9 @@ function IndividualPost(props) {
   const [isError, setIsError] = useState();
   const [showComments, setShowComments] = useState(false);
   const [session, loading] = useSession();
+  const router = useRouter();
+
+
 
   function toggleLike() {
     setLiked(!liked);
@@ -72,6 +76,7 @@ function IndividualPost(props) {
         postId
       );
       commentInputRef.current.value = "";
+      router.replace('/feed/' + postId);
     } catch (error) {
       setIsError(error.toString());
     }
@@ -81,12 +86,12 @@ function IndividualPost(props) {
     setShowComments(!showComments);
   }
 
-  async function deleteHandler(postId){
-    postId = props.getSelectedPost._id
-    const response = await fetch('/api/posts/delete-post', {
+  async function deleteHandler(postId) {
+    postId = props.getSelectedPost._id;
+    const response = await fetch("/api/posts/delete-post", {
       method: "DELETE",
       body: JSON.stringify({
-        postId
+        postId,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -94,6 +99,7 @@ function IndividualPost(props) {
     });
 
     const data = await response.json();
+    router.push("/feed");
   }
 
   const changeColor = liked ? "red" : "white";
@@ -119,17 +125,14 @@ function IndividualPost(props) {
               </button>
               <p>Like</p>
             </li>
+            {props.getSelectedPost.username === props.username && (
             <li>
-            <Link href={"/feed"}>
-              <button
-                className={classes.likeBtn}
-                onClick={deleteHandler}
-              >
+              <button className={classes.likeBtn} onClick={deleteHandler}>
                 <FontAwesomeIcon icon={faTrash} style={{ color: "white" }} />
               </button>
-              </Link>
               <p>Delete post</p>
             </li>
+            )}
           </ul>
         </div>
       </div>
