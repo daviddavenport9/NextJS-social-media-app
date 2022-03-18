@@ -1,12 +1,10 @@
 import classes from "./IndividualPost.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Fragment, useRef, useState, useEffect} from "react";
+import { Fragment, useRef, useState, useEffect } from "react";
 import { toaster } from "evergreen-ui";
 import { useSession, getSession } from "next-auth/client";
 import { useRouter } from "next/router";
-
-
 
 function IndividualPost(props) {
   const [liked, setLiked] = useState(false);
@@ -16,8 +14,6 @@ function IndividualPost(props) {
   const [showComments, setShowComments] = useState(false);
   const [session, loading] = useSession();
   const router = useRouter();
-
-
 
   function toggleLike() {
     setLiked(!liked);
@@ -48,6 +44,7 @@ function IndividualPost(props) {
     if (!response.ok) {
       throw new Error(data.message || "Something went wrong");
     }
+
     setCommentsArray((commentsArray) =>
       [...commentsArray, data].sort().reverse()
     );
@@ -75,8 +72,10 @@ function IndividualPost(props) {
         email,
         postId
       );
+
+      console.log(returnData.profilePic);
       commentInputRef.current.value = "";
-      router.replace('/feed/' + postId);
+      // router.replace("/feed/" + postId);
     } catch (error) {
       setIsError(error.toString());
     }
@@ -102,12 +101,29 @@ function IndividualPost(props) {
     router.push("/feed");
   }
 
+  async function deleteHandlerComment(commentId){
+    const response = await fetch("/api/posts/delete-comment", {
+      method: "DELETE",
+      body: JSON.stringify({
+        commentId,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+  }
+
   const changeColor = liked ? "red" : "white";
 
   return (
     <Fragment>
       <div className={classes.indivPostContainer}>
-        <h4>{props.getSelectedPost.username}</h4>
+        <div className={classes.topLine}>
+          <h4>{props.getSelectedPost.username}</h4>
+          <img src={props.getSelectedPost.profilePic} height="40px" />
+        </div>
         <p>{props.getSelectedPost.postText}</p>
         <div className={classes.dateTimeFormat}>
           <p>{props.getSelectedPost.postTime}</p>
@@ -126,12 +142,12 @@ function IndividualPost(props) {
               <p>Like</p>
             </li>
             {props.getSelectedPost.username === props.username && (
-            <li>
-              <button className={classes.likeBtn} onClick={deleteHandler}>
-                <FontAwesomeIcon icon={faTrash} style={{ color: "white" }} />
-              </button>
-              <p>Delete post</p>
-            </li>
+              <li>
+                <button className={classes.likeBtn} onClick={deleteHandler}>
+                  <FontAwesomeIcon icon={faTrash} style={{ color: "white" }} />
+                </button>
+                <p>Delete post</p>
+              </li>
             )}
           </ul>
         </div>
@@ -160,15 +176,28 @@ function IndividualPost(props) {
             {commentsArray.map((comment) => (
               <div key={comment._id} className={classes.indivPostContainer}>
                 <li>
-                  <div>
+                  <div className={classes.topLine}>
                     <h4>{comment.username}</h4>
+                    <img src={comment.profilePic} height="40px" />
+                 
                   </div>
                   <p>{comment.comment}</p>
-                  <hr></hr>
+               
                   <div className={classes.dateTimeFormat}>
                     <p>{comment.postTime}</p>
                     <p>{comment.postDate}</p>
                   </div>
+                 
+                  {comment.username === props.username && (
+                    
+                    <div>
+                    <hr></hr>
+                    <button className={classes.likeBtn} onClick={() => deleteHandlerComment(comment._id)}>
+                      <FontAwesomeIcon icon={faTrash} style={{ color: "white" }} />
+                    </button>
+                    <p>Delete comment</p>
+                    </div>
+                )}
                 </li>
               </div>
             ))}

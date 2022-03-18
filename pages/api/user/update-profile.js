@@ -24,9 +24,7 @@ async function handler(req, res) {
 
 
   const client = await connectToDatabase();
-
   const usersCollection = client.db().collection("users");
-
   const user = await usersCollection.findOne({
     email: userEmail,
   });

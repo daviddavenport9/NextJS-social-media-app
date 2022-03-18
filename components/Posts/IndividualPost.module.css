@@ -106,3 +106,16 @@
     list-style-type: none;
     margin-right: 40px;
 }
+
+.topLine {
+  display: flex;
+}
+
+.topLine h4  {
+ margin-right: 20px;
+}
+
+.topLine img {
+ margin-top: 10px;
+ border-radius: 50%;
+}

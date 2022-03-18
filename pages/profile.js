@@ -11,6 +11,7 @@ function ProfilePage(props) {
         bio={props.bio}
         dob={props.dob}
         username={props.username}
+        profilePic={props.profilePic}
       />
     </div>
   );

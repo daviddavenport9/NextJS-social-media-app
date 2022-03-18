@@ -4,6 +4,7 @@ import classes from "../StartingSection/StartingSection.module.css";
 import classes2 from "./ProfileForm.module.css";
 import { toaster } from "evergreen-ui";
 
+
 function ProfileForm(props) {
   const [email, setEmail] = useState();
   const firstNameInput = useRef();
@@ -12,27 +13,60 @@ function ProfileForm(props) {
   const dobInput = useRef();
   const profilePictureInput = useRef();
 
+  console.log(props.profilePic);
+
   useEffect(() => {
     getSession().then((session) => {
       setEmail(session.user.email);
     });
   }, []);
 
-  function submitHandler(event) {
+  async function updateUser(firstName, lastName, bio, dob, profilePic) {
+    const formData = new FormData();
+    formData.append('file', profilePic);
+    formData.append('upload_preset', 'my-uploads');
+
+    const profilePicData = await fetch('https://api.cloudinary.com/v1_1/dmvtlczp8/image/upload', {
+    method: 'POST',
+    body: formData
+  }).then(r => r.json())
+
+  const profilePicPath = profilePicData.secure_url;
+
+
+    const response = await fetch("/api/user/update-profile", {
+      method: "PATCH",
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        bio,
+        dob,
+        profilePic: profilePicPath
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    console.log(data);
+  }
+  
+
+  async function submitHandler(event) {
     event.preventDefault();
+
     const enteredFirstName = firstNameInput.current.value;
     const enteredLastName = lastNameInput.current.value;
     const enteredBio = bioInput.current.value;
     const enteredDob = dobInput.current.value;
     const enteredProfilePic = profilePictureInput.current.files[0];
 
-    props.onUpdateProfile({
-      firstName: enteredFirstName,
-      lastName: enteredLastName,
-      bio: enteredBio,
-      dob: enteredDob,
-      profilePic: enteredProfilePic,
-    });
+    try {
+      await updateUser(enteredFirstName, enteredLastName, enteredBio, enteredDob, enteredProfilePic);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const customNotify = () => {
@@ -62,7 +96,9 @@ function ProfileForm(props) {
             id="profilePic"
             accept="image/png, image/jpeg, image/jpg"
             ref={profilePictureInput}
+            name="profilePic"
           />
+          <img src={props.profilePic}/>
         </div>
         <div className={classes.control}>
           <label htmlFor="firstName">First Name: </label>
@@ -71,6 +107,7 @@ function ProfileForm(props) {
             id="firstName"
             ref={firstNameInput}
             defaultValue={props.firstName}
+            
           />
         </div>
         <div className={classes.control}>

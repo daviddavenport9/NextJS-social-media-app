@@ -21,24 +21,10 @@ function UserProfile(props) {
     return <p className={classes.profile}>Loading...</p>;
   }
 
-  async function updateUser(profileData) {
-    const response = await fetch("/api/user/update-profile", {
-      method: "PATCH",
-      body: JSON.stringify(profileData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await response.json();
-    console.log(data);
-  }
-
   return (
     <div>
       <h1 className={classes.section}>Your User Profile</h1>
       <ProfileForm
-        onUpdateProfile={updateUser}
         firstName={props.firstName}
         lastName={props.lastName}
         bio={props.bio}

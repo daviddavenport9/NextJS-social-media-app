@@ -7,21 +7,13 @@ import { useSession, getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import { toaster } from "evergreen-ui";
 
-
-
-
 function Posts(props) {
-
   const [liked, setLiked] = useState(false);
   const [session, loading] = useSession();
   const [postsArray, setPostsArray] = useState(props.allPosts);
   const postInput = useRef();
   const [isError, setIsError] = useState();
   const router = useRouter();
-
-  
-
- 
 
   async function submitPost(username, postText, postDate, postTime) {
     const response = await fetch("/api/posts/submit-post", {
@@ -37,15 +29,13 @@ function Posts(props) {
       },
     });
     const data = await response.json();
-  
+
     if (!response.ok) {
       throw new Error(data.message || "Something went wrong");
     }
     setPostsArray((postsArray) => [...postsArray, data].sort().reverse());
     return data;
   }
-
-
 
   const customNotify = () => {
     toaster.notify(isError);
@@ -67,17 +57,17 @@ function Posts(props) {
     try {
       await submitPost(username, postText, postDate, postTime);
       postInput.current.value = "";
-      router.replace('/feed');
+      router.replace("/feed");
     } catch (error) {
       setIsError(error.toString());
     }
   }
 
-  async function deleteHandler(postId){
-    const response = await fetch('/api/posts/delete-post', {
+  async function deleteHandler(postId) {
+    const response = await fetch("/api/posts/delete-post", {
       method: "DELETE",
       body: JSON.stringify({
-        postId
+        postId,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -85,8 +75,7 @@ function Posts(props) {
     });
 
     const data = await response.json();
-    router.replace('/feed');
-
+    router.replace("/feed");
   }
 
   function toggleLike() {
@@ -118,7 +107,10 @@ function Posts(props) {
         {props.allPosts.map((post) => (
           <div className={classes.indivPostContainer} key={post._id}>
             <li>
-              <h5>{post.username}</h5>
+              <div className={classes.topLine}>
+                <h5>{post.username}</h5>
+                <img src={post.profilePic} height="40px" />
+              </div>
               <p>{post.postText}</p>
               <hr></hr>
               <div className={classes.interactContainer}>
@@ -144,15 +136,18 @@ function Posts(props) {
                     <p>Leave a comment</p>
                   </li>
                   {props.username === post.username && (
-                  <li>
-                  <button className={classes.likeBtn} onClick={() => deleteHandler(post._id)}>
-                  <FontAwesomeIcon
+                    <li>
+                      <button
+                        className={classes.likeBtn}
+                        onClick={() => deleteHandler(post._id)}
+                      >
+                        <FontAwesomeIcon
                           icon={faTrash}
                           style={{ color: "white" }}
                         />
-                  </button>
-                  <p>Delete Post</p>
-                  </li>
+                      </button>
+                      <p>Delete Post</p>
+                    </li>
                   )}
                 </ul>
               </div>

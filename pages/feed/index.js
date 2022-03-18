@@ -41,7 +41,7 @@ export async function getServerSideProps(context) {
   return{
       props: {
           posts: JSON.parse(JSON.stringify(posts)),
-          username: user.username
+          username: user.username,
       }
   }
 }

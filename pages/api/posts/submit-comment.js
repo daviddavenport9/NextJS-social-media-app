@@ -38,6 +38,7 @@ async function handler(req, res) {
     postId: postId,
     postTime: postTime,
     postDate: postDate,
+    profilePic: user.profilePic
   });
 
   res
@@ -48,6 +49,7 @@ async function handler(req, res) {
       postId: postId,
       postTime: postTime,
       postDate: postDate,
+      profilePic: user.profilePic
     });
   client.close();
 }

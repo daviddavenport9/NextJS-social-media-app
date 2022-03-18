@@ -44,7 +44,7 @@ async function handler(req, res) {
       lastName: '',
       bio: '',
       dob: '',
-      profilePic: ''
+      profilePic: 'https://res.cloudinary.com/dmvtlczp8/image/upload/v1647548976/my-uploads/fxc5h42ca8ynw2gg8vk4.png'
     });
 
     res.status(201).json({ message: "Created user!" });

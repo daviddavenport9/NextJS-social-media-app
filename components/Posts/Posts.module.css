@@ -16,9 +16,19 @@
     word-wrap: break-word;
 }
 
-.indivPostContainer h5 {
+.topLine {
    display: flex;
 }
+
+.topLine h5 {
+  margin-right: 20px;
+}
+
+.topLine img {
+  margin-top: 10px;
+  border-radius: 50%;
+}
+
 
 
  .allPostsContainer{
