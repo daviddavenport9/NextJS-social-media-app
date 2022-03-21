@@ -1,0 +1,15 @@
+.blurbContainer {
+    text-align: center;
+    margin-top: 2rem;
+    color: white;
+}
+
+.blurbContainer  h2 {
+    color: #38015c;
+    font-weight: bold;
+}
+
+.blurbContainer img {
+    border-radius: 50%;
+}
+

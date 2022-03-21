@@ -12,6 +12,7 @@ function ProfilePage(props) {
         dob={props.dob}
         username={props.username}
         profilePic={props.profilePic}
+        posts={props.posts}
       />
     </div>
   );
@@ -29,14 +30,21 @@ export async function getServerSideProps(context) {
     };
   }
 
+  
+
   const userEmail = session.user.email;
   const client = await connectToDatabase();
-
   const usersCollection = client.db().collection("users");
-
   const user = await usersCollection.findOne({
     email: userEmail,
   });
+
+  const postsCollection =  client.db().collection("posts");
+  const posts = await postsCollection.find({
+    username: user.username
+  }).sort({_id: -1}).toArray();
+
+
 
   return {
     props: {
@@ -47,7 +55,8 @@ export async function getServerSideProps(context) {
       lastname: user.lastName,
       bio: user.bio,
       dob: user.dob,
-      profilePic: user.profilePic
+      profilePic: user.profilePic,
+      posts: JSON.parse(JSON.stringify(posts)),
     },
   };
 }

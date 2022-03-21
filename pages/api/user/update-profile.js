@@ -35,6 +35,14 @@ async function handler(req, res) {
     return;
   }
 
+  if (typeof(profilePic) === 'undefined'){
+    const result = await usersCollection.updateOne(
+      { email: userEmail },
+      { $set: { firstName: firstName, lastName: lastName, bio: bio, dob: dob} }
+    );
+    client.close();
+  }
+
   
 
   const result = await usersCollection.updateOne(

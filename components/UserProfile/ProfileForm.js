@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import classes from "../StartingSection/StartingSection.module.css";
 import classes2 from "./ProfileForm.module.css";
 import { toaster } from "evergreen-ui";
-
+import { useRouter } from "next/router";
 
 function ProfileForm(props) {
   const [email, setEmail] = useState();
@@ -12,6 +12,7 @@ function ProfileForm(props) {
   const bioInput = useRef();
   const dobInput = useRef();
   const profilePictureInput = useRef();
+  const router = useRouter();
 
   console.log(props.profilePic);
 
@@ -23,16 +24,18 @@ function ProfileForm(props) {
 
   async function updateUser(firstName, lastName, bio, dob, profilePic) {
     const formData = new FormData();
-    formData.append('file', profilePic);
-    formData.append('upload_preset', 'my-uploads');
+    formData.append("file", profilePic);
+    formData.append("upload_preset", "my-uploads");
 
-    const profilePicData = await fetch('https://api.cloudinary.com/v1_1/dmvtlczp8/image/upload', {
-    method: 'POST',
-    body: formData
-  }).then(r => r.json())
+    const profilePicData = await fetch(
+      "https://api.cloudinary.com/v1_1/dmvtlczp8/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    ).then((r) => r.json());
 
-  const profilePicPath = profilePicData.secure_url;
-
+    const profilePicPath = profilePicData.secure_url;
 
     const response = await fetch("/api/user/update-profile", {
       method: "PATCH",
@@ -41,7 +44,7 @@ function ProfileForm(props) {
         lastName,
         bio,
         dob,
-        profilePic: profilePicPath
+        profilePic: profilePicPath,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -49,9 +52,7 @@ function ProfileForm(props) {
     });
 
     const data = await response.json();
-    console.log(data);
   }
-  
 
   async function submitHandler(event) {
     event.preventDefault();
@@ -63,10 +64,17 @@ function ProfileForm(props) {
     const enteredProfilePic = profilePictureInput.current.files[0];
 
     try {
-      await updateUser(enteredFirstName, enteredLastName, enteredBio, enteredDob, enteredProfilePic);
+      await updateUser(
+        enteredFirstName,
+        enteredLastName,
+        enteredBio,
+        enteredDob,
+        enteredProfilePic
+      );
     } catch (error) {
       console.log(error);
     }
+    window.location.reload();
   }
 
   const customNotify = () => {
@@ -76,6 +84,7 @@ function ProfileForm(props) {
   return (
     <div className={classes2.container}>
       <form onSubmit={submitHandler}>
+        <h1 style={{color: 'white'}}>Edit Info</h1>
         <div className={classes.control}>
           <label htmlFor="Email">Email: </label>
           <input type="email" id="email" value={email} disabled />
@@ -98,7 +107,7 @@ function ProfileForm(props) {
             ref={profilePictureInput}
             name="profilePic"
           />
-          <img src={props.profilePic}/>
+          <img src={props.profilePic} />
         </div>
         <div className={classes.control}>
           <label htmlFor="firstName">First Name: </label>
@@ -107,7 +116,6 @@ function ProfileForm(props) {
             id="firstName"
             ref={firstNameInput}
             defaultValue={props.firstName}
-            
           />
         </div>
         <div className={classes.control}>

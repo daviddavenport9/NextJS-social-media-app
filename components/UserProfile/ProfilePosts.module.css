@@ -10,7 +10,22 @@
     margin: 1rem auto;
     color: white;
     font-weight: bold;
+    
 }
+
+.indivPostContainer ul {
+    list-style: none;
+}
+.indivPostContainer li {
+    list-style-type: none;
+}
+
+#postsHeader{
+    text-align: center;
+    color: white;
+}
+
+
 
 .indivPostContainer p {
     word-wrap: break-word;

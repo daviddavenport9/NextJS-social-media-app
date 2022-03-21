@@ -7,10 +7,10 @@ import { useSession, getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import { toaster } from "evergreen-ui";
 
+
 function Posts(props) {
   const [liked, setLiked] = useState(false);
   const [session, loading] = useSession();
-  const [postsArray, setPostsArray] = useState(props.allPosts);
   const postInput = useRef();
   const [isError, setIsError] = useState();
   const router = useRouter();
@@ -33,7 +33,6 @@ function Posts(props) {
     if (!response.ok) {
       throw new Error(data.message || "Something went wrong");
     }
-    setPostsArray((postsArray) => [...postsArray, data].sort().reverse());
     return data;
   }
 
@@ -112,6 +111,10 @@ function Posts(props) {
                 <img src={post.profilePic} height="40px" />
               </div>
               <p>{post.postText}</p>
+              <div className={classes.dateTimeFormat}>
+                <p>{post.postTime}</p>
+                <p>{post.postDate}</p>
+              </div>
               <hr></hr>
               <div className={classes.interactContainer}>
                 <ul>

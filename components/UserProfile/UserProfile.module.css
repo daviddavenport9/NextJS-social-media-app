@@ -13,3 +13,83 @@
       color: white;
       font-weight: bold;
   }
+
+  
+.actions {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.actions button {
+  cursor: pointer;
+  font: inherit;
+  color: white;
+  background-color: #9f5ccc;
+  border: 1px solid #9f5ccc;
+  border-radius: 4px;
+  padding: 0.5rem 2.5rem;
+}
+
+.actions button:hover {
+  background-color: #873abb;
+  border-color: #873abb;
+}
+
+.actions .toggle {
+  margin-top: 1rem;
+  background-color: transparent;
+  color: #9f5ccc;
+  border: none;
+  padding: 0.15rem 1.5rem;
+}
+
+.actions .toggle:hover {
+  background-color: transparent;
+  color: #ae82cc;
+}
+
+.modal {
+  position: fixed;
+  z-index: 999;
+  top: 10%;
+  left: 47%;
+  width: 500px auto;
+  margin-left: -150px;
+  background-color:#38015c;
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
+  text-align: center;
+  border-radius: 30px;
+  height: auto;
+}
+
+.outerModal{
+  top: 0;
+  left: 0;
+  display: block;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+}
+
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  margin: -20px;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
