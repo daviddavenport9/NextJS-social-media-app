@@ -57,7 +57,7 @@ function UserProfile(props) {
       <div className={classes.actions}>
         <button onClick={showModal}>Edit Profile</button>
       </div>
-      <ProfilePosts posts={props.posts} />
+      <ProfilePosts posts={props.posts} loggedInUser={props.username}/>
     </div>
   );
 }

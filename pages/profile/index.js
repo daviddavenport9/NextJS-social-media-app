@@ -1,6 +1,6 @@
-import UserProfile from "../components/UserProfile/UserProfile";
+import UserProfile from "../../components/UserProfile/UserProfile";
 import { getSession } from "next-auth/client";
-import { connectToDatabase } from "../util/db";
+import { connectToDatabase } from "../../util/db";
 
 function ProfilePage(props) {
   return (

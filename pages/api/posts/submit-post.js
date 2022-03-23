@@ -24,6 +24,7 @@ async function handler(req, res) {
   const postText = req.body.postText;
   const postTime = req.body.postTime;
   const postDate = req.body.postDate;
+  const postPic = req.body.postPic;
 
   const client = await connectToDatabase();
 
@@ -40,7 +41,8 @@ async function handler(req, res) {
     postText: postText,
     postTime: postTime,
     postDate: postDate,
-    profilePic: user.profilePic
+    profilePic: user.profilePic,
+    postPic: postPic
   });
 
   res.status(201).json({

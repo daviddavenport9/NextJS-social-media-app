@@ -44,6 +44,7 @@ function ProfilePosts(props) {
                   <img src={post.profilePic} height="40px" />
                 </div>
                 <p>{post.postText}</p>
+                {post.postPic && <img src={post.postPic} height="300px" />}
                 <div className={classes.dateTimeFormat}>
                   <p>{post.postTime}</p>
                   <p>{post.postDate}</p>
@@ -71,19 +72,20 @@ function ProfilePosts(props) {
                       </Link>
                       <p>Leave a comment</p>
                     </li>
-
-                    <li>
-                      <button
-                        className={classes.likeBtn}
-                        onClick={() => deleteHandler(post._id)}
-                      >
-                        <FontAwesomeIcon
-                          icon={faTrash}
-                          style={{ color: "white" }}
-                        />
-                      </button>
-                      <p>Delete Post</p>
-                    </li>
+                    {props.loggedInUser === post.username && (
+                      <li>
+                        <button
+                          className={classes.likeBtn}
+                          onClick={() => deleteHandler(post._id)}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            style={{ color: "white" }}
+                          />
+                        </button>
+                        <p>Delete Post</p>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </li>

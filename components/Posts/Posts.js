@@ -7,15 +7,29 @@ import { useSession, getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import { toaster } from "evergreen-ui";
 
-
 function Posts(props) {
   const [liked, setLiked] = useState(false);
   const [session, loading] = useSession();
   const postInput = useRef();
   const [isError, setIsError] = useState();
   const router = useRouter();
+  const postPictureInput = useRef();
 
-  async function submitPost(username, postText, postDate, postTime) {
+  async function submitPost(username, postText, postDate, postTime, postPic) {
+    const formData = new FormData();
+    formData.append("file", postPic);
+    formData.append("upload_preset", "post-images");
+
+    const postPicData = await fetch(
+      "https://api.cloudinary.com/v1_1/dmvtlczp8/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    ).then((r) => r.json());
+
+    const postPicPath = postPicData.secure_url;
+
     const response = await fetch("/api/posts/submit-post", {
       method: "POST",
       body: JSON.stringify({
@@ -23,6 +37,7 @@ function Posts(props) {
         postText,
         postDate,
         postTime,
+        postPic: postPicPath,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -44,8 +59,8 @@ function Posts(props) {
     event.preventDefault();
     const postText = postInput.current.value;
     const username = props.username;
+    const enteredPostPic = postPictureInput.current.files[0];
 
-    console.log(username);
     const time = new Date();
     const postTime = time.toLocaleTimeString(navigator.language, {
       hour: "2-digit",
@@ -54,8 +69,9 @@ function Posts(props) {
     const postDate = time.toLocaleDateString();
 
     try {
-      await submitPost(username, postText, postDate, postTime);
+      await submitPost(username, postText, postDate, postTime, enteredPostPic);
       postInput.current.value = "";
+      postPictureInput.current.value = "";
       router.replace("/feed");
     } catch (error) {
       setIsError(error.toString());
@@ -78,7 +94,7 @@ function Posts(props) {
   }
 
   function toggleLike() {
-    setLiked(!liked);
+    setLiked(!liked)
   }
 
   function getTimeSincePost(postTime, postDate) {
@@ -95,6 +111,16 @@ function Posts(props) {
           <div className={classes.control}>
             <textarea rows={4} ref={postInput}></textarea>
           </div>
+          <div className={classes.control}>
+            <label htmlFor="profilePic">Attach a picture: </label>
+            <input
+              type="file"
+              id="profilePic"
+              accept="image/png, image/jpeg, image/jpg"
+              ref={postPictureInput}
+              name="profilePic"
+            />
+          </div>
           <div className={classes.actions}>
             <button>Post</button>
           </div>
@@ -106,11 +132,15 @@ function Posts(props) {
         {props.allPosts.map((post) => (
           <div className={classes.indivPostContainer} key={post._id}>
             <li>
-              <div className={classes.topLine}>
-                <h5>{post.username}</h5>
-                <img src={post.profilePic} height="40px" />
-              </div>
+              <Link href={post.email === props.email ? 'profile' : 'profile/' + post.username.substring(1)}>
+                <div className={classes.topLine}>
+                  <h5>{post.username}</h5>
+                  <img src={post.profilePic} height="40px" />
+                </div>
+              </Link>
+
               <p>{post.postText}</p>
+              {post.postPic && <img src={post.postPic} height="300px" />}
               <div className={classes.dateTimeFormat}>
                 <p>{post.postTime}</p>
                 <p>{post.postDate}</p>

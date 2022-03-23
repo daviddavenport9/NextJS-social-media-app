@@ -7,7 +7,7 @@ import { connectToDatabase } from "../../util/db";
 function FeedPage(props) {
   return (
     <Fragment>
-      <Posts allPosts={props.posts} username={props.username}/>
+      <Posts allPosts={props.posts} username={props.username} email={props.email}/>
     </Fragment>
   );
 }
@@ -42,6 +42,7 @@ export async function getServerSideProps(context) {
       props: {
           posts: JSON.parse(JSON.stringify(posts)),
           username: user.username,
+          email: session.user.email
       }
   }
 }

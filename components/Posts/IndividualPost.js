@@ -75,7 +75,7 @@ function IndividualPost(props) {
 
       console.log(returnData.profilePic);
       commentInputRef.current.value = "";
-      // router.replace("/feed/" + postId);
+       router.replace("/feed/" + postId);
     } catch (error) {
       setIsError(error.toString());
     }
@@ -102,6 +102,7 @@ function IndividualPost(props) {
   }
 
   async function deleteHandlerComment(commentId){
+    const postId = props.getSelectedPost._id;
     const response = await fetch("/api/posts/delete-comment", {
       method: "DELETE",
       body: JSON.stringify({
@@ -113,6 +114,7 @@ function IndividualPost(props) {
     });
 
     const data = await response.json();
+    router.replace("/feed/" + postId);
   }
 
   const changeColor = liked ? "red" : "white";
@@ -125,6 +127,9 @@ function IndividualPost(props) {
           <img src={props.getSelectedPost.profilePic} height="40px" />
         </div>
         <p>{props.getSelectedPost.postText}</p>
+        {props.getSelectedPost.postPic && (
+        <img src={props.getSelectedPost.postPic} height="300px"/>
+        )}
         <div className={classes.dateTimeFormat}>
           <p>{props.getSelectedPost.postTime}</p>
           <p>{props.getSelectedPost.postDate}</p>
@@ -173,7 +178,7 @@ function IndividualPost(props) {
             {isError && <div>{customNotify()}</div>}
           </div>
           <ul className={classes.allPostsContainer}>
-            {commentsArray.map((comment) => (
+            {props.getComments.map((comment) => (
               <div key={comment._id} className={classes.indivPostContainer}>
                 <li>
                   <div className={classes.topLine}>
